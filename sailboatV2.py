@@ -11,6 +11,7 @@ def angle(x):
 
 class sailboat:
     def __init__(self):
+        # coeff
         self.p0 = 0.1
         self.p1 = 1
         self.p2 = 6000
@@ -21,6 +22,7 @@ class sailboat:
         self.p7 = 2
         self.p8 = 300
         self.p9 = 10000
+        # coordonnées
         self.x = array([[10, -40, -3, 1, 0]]).T  # x=(x,y,θ,v,w)
         self.dt = 0.1
         self.awind = 2
