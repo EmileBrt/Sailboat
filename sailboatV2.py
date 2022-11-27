@@ -11,41 +11,45 @@ def angle(x):
 
 class sailboat:
     def __init__(self):
-        # coeff
-        self.p0 = 0.1
-        self.p1 = 1
-        self.p2 = 6000
-        self.p3 = 1000
-        self.p4 = 2000
-        self.p5 = 1
-        self.p6 = 1
-        self.p7 = 2
-        self.p8 = 300
-        self.p9 = 10000
+        # coefficients
+        self.p0 = 0.1  # drift coefficient
+        self.p1 = 1  # drag coefficient
+        self.p2 = 6000  # angular friction of the hull against the water
+        self.p3 = 1000  # sail lift
+        self.p4 = 2000  # rudder lift
+        self.p5 = 1  # position of the wind's center of thrust on the sail
+        self.p6 = 1  # position of the mast
+        self.p7 = 2  # position of the rudder
+        self.p8 = 300  # mass of the sailboat
+        self.p9 = 10000  # inertial momentum of the sailboat
         # coordonnées
         self.x = array([[10, -40, -3, 1, 0]]).T  # x=(x,y,θ,v,w)
         self.dt = 0.1
         self.awind = 2
         self.phi = -2
         self.q = 0
-        self.a = array([[-50], [-100]])
-        self.b = array([[50], [100]])
-        self.r = 10
+        # points qui donnent le cap à tenir
+        self.a = array([[-50], [-100]])  # pt a
+        self.b = array([[50], [100]])  # pt b
+        self.r = 10  # couloir autour de la ligne à tenir
         self.ksi = pi / 4
         self.delta_r_max = 1
-        self.beta = pi / 4
+        self.beta = pi / 4  # coefficient obtenu avec l'équation résolue
 
     def f(self, u):
+        """
+        donne la dérivée en fonction du modèle : x' en fonction de u
+        """
         self.x, u = self.x.flatten(), u.flatten()
-        θ = self.x[2];
-        v = self.x[3];
-        w = self.x[4];
-        δr = u[0];
-        δsmax = u[1];
-        w_ap = array([[self.awind * cos(self.phi - θ) - v], [self.awind * sin(self.phi - θ)]])
-        phi_ap = angle(w_ap)
+        θ = self.x[2]
+        v = self.x[3]
+        w = self.x[4]
+        δr = u[0]
+        δsmax = u[1]
+        w_ap = array([[self.awind * cos(self.phi - θ) - v], [self.awind * sin(self.phi - θ)]])  # vent apparent, cf formule du poly
+        phi_ap = angle(w_ap)  # idem
         a_ap = norm(w_ap)
-        sigma = cos(phi_ap) + cos(δsmax)
+        sigma = cos(phi_ap) + cos(δsmax)  # indicateur de la tension
         if sigma < 0:
             δs = pi + phi_ap
         else:
@@ -57,9 +61,12 @@ class sailboat:
         dv = (fs * sin(δs) - fr * sin(δr) - self.p1 * v ** 2) / self.p8
         dw = (fs * (self.p5 - self.p6 * cos(δs)) - self.p7 * fr * cos(δr) - self.p2 * w * v) / self.p9
         xdot = array([[dx], [dy], [w], [dv], [dw]])
-        return xdot, δs
+        return xdot, δs  # δs angle de la voile
 
     def my_det(self,v_x, v_y):
+        """
+
+        """
         vx1, vx2 = v_x.flatten()
         vy1, vy2 = v_y.flatten()
         return vx1 * vy2 - vy1 * vx2
