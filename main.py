@@ -65,7 +65,7 @@ while boat.finish != len(boat.objective):
     plot(r_v[0, :], r_v[1, :], color='blue')
 
 
-    t+=dt
+    t+=dt #dt
     dt+=0.1
     pause(0.01)
 
