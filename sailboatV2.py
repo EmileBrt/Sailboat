@@ -10,7 +10,7 @@ def angle(x):
     return arctan2(x[1],x[0])
 
 class sailboat:
-    def __init__(self):
+    def __init__(self,objectif= array([array([[-50], [0]]), array([[50], [50]]), array([[100], [-50]])]), x0=array([[10, -40, -3, 1, 0]]).T):
         # coefficients
         self.p0 = 0.1  # drift coefficient
         self.p1 = 1  # drag coefficient
@@ -22,18 +22,13 @@ class sailboat:
         self.p7 = 2  # position of the rudder
         self.p8 = 300  # mass of the sailboat
         self.p9 = 10000  # inertial momentum of the sailboat
+
         # coordonnées
-        self.x = array([[10, -40, -3, 1, 0]]).T  # x=(x,y,θ,v,w)
-        self.dt = 0.1
+        self.x = x0  # x=(x,y,θ,v,w)
         self.awind = 2
         self.phi = -2
         self.q = 0
-        # points qui donnent le cap à tenir
-        self.a = array([[-50], [0]])  # pt a
-        self.b = array([[50], [50]])  # pt b
-        self.c = array([[100], [-50]])  # pt c
-        self.pos = array([[self.x[0, 0]], [self.x[1, 0]]])
-        self.objective = array([self.a,self.b,self.c])
+        self.objective = objectif
         self.finish = 0
 
         self.r = 10  # couloir autour de la ligne à tenir
@@ -45,13 +40,16 @@ class sailboat:
         """
         donne la dérivée en fonction du modèle : x' en fonction de u
         """
-        self.pos = array([[self.x[0, 0]], [self.x[1, 0]]])
         self.x, u = self.x.flatten(), u.flatten()
         θ = self.x[2] # angle du voilier
         v = self.x[3] # vitesse du voilier
         w = self.x[4] # vitesse de rotation instantannée
         δr = u[0] # angle du gouvernail
         δsmax = u[1] # angle de la voile
+
+        #modification du vent en fonction du temps
+
+
         w_ap = array([[self.awind * cos(self.phi - θ) - v], [self.awind * sin(self.phi - θ)]])  # vent apparent, cf formule du poly
         phi_ap = angle(w_ap)   # direction du vent apparent
         a_ap = norm(w_ap)
