@@ -9,9 +9,8 @@ fig = figure()
 ax = fig.add_subplot(111, aspect='equal')
 
 
-t=0
+dt,t=0.1,0
 while boat.finish != len(boat.objective):
-
     cla()
     ax.set_xlim(-200, 200)
     ax.set_ylim(-100, 100)
@@ -23,8 +22,8 @@ while boat.finish != len(boat.objective):
         ax.plot(objectif[0], objectif[1], 'ro')
 
     u=boat.controleur()
-    xdot,δs=boat.f(u)
-    boat.x = (boat.x + (boat.dt*xdot).T).T
+    xdot,δs=boat.f(u, dt)
+    boat.x = (boat.x + (dt*xdot).T).T
 
     #### Tracé du bâteau
     a,b,c = 5,7,2
@@ -53,6 +52,8 @@ while boat.finish != len(boat.objective):
     plot(r_v[0, :], r_v[1, :], color='blue')
 
 
-    t+=0.1
+    t+=dt
     pause(0.01)
+
+print('temps de parcours : ', t)
 pause(10)

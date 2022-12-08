@@ -22,9 +22,9 @@ class sailboat:
         self.p7 = 2  # position of the rudder
         self.p8 = 300  # mass of the sailboat
         self.p9 = 10000  # inertial momentum of the sailboat
+
         # coordonnées
         self.x = x0  # x=(x,y,θ,v,w)
-        self.dt = 0.1
         self.awind = 2
         self.phi = -2
         self.q = 0
@@ -36,7 +36,7 @@ class sailboat:
         self.delta_r_max = 1
         self.beta = pi / 4  # coefficient obtenu avec l'équation résolue
 
-    def f(self, u):
+    def f(self, u, dt):
         """
         donne la dérivée en fonction du modèle : x' en fonction de u
         """
@@ -46,6 +46,11 @@ class sailboat:
         w = self.x[4] # vitesse de rotation instantannée
         δr = u[0] # angle du gouvernail
         δsmax = u[1] # angle de la voile
+
+        #modification du vent en fonction du temps
+
+
+        self.phi = dt
         w_ap = array([[self.awind * cos(self.phi - θ) - v], [self.awind * sin(self.phi - θ)]])  # vent apparent, cf formule du poly
         phi_ap = angle(w_ap)   # direction du vent apparent
         a_ap = norm(w_ap)
