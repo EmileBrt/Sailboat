@@ -8,16 +8,19 @@ boat = sailboat()
 fig = figure()
 ax = fig.add_subplot(111, aspect='equal')
 
-for t in arange(0,60,0.1):
+for t in arange(0,1000,0.1):
     cla()
-    ax.set_xlim(-100, 100)
-    ax.set_ylim(-60, 60)
+    ax.set_xlim(-200, 200)
+    ax.set_ylim(-100, 100)
     plot([boat.a[0,0],boat.b[0,0]],[boat.a[1,0],boat.b[1,0]],'red')
+    plot([boat.a[0,0],boat.c[0,0]],[boat.a[1,0],boat.c[1,0]],'blue')
+    plot([boat.b[0,0],boat.c[0,0]],[boat.b[1,0],boat.c[1,0]],'green')
+
     u=boat.controleur()
     xdot,δs=boat.f(u)
     boat.x = (boat.x + (boat.dt*xdot).T).T
 
-    #### Tracer du bâteau
+    #### Tracé du bâteau
     a,b,c = 5,7,2
     m = array([[0,c,c,-c,-c,0],[b,b-c,-a,-a,(b-c),b]])
     teta = (boat.x[2][0] + ((3*np.pi)/2))%(2*np.pi)
@@ -27,7 +30,7 @@ for t in arange(0,60,0.1):
     r += array([np.zeros(6),np.ones(6)])*boat.x[1]
     plot(r[0, :], r[1, :], color='red')
 
-    #### Tracer du Vent
+    #### Tracé du Vent
     f = array([[-10,10,8],[0,0,2]])
     phi = boat.phi
     bp_v = array([[np.cos(phi), -np.sin(phi)], [np.sin(phi), np.cos(phi)]])

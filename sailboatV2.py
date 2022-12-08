@@ -29,8 +29,12 @@ class sailboat:
         self.phi = -2
         self.q = 0
         # points qui donnent le cap à tenir
-        self.a = array([[-50], [-100]])  # pt a
-        self.b = array([[50], [100]])  # pt b
+        self.a = array([[-50], [0]])  # pt a
+        self.b = array([[50], [50]])  # pt b
+        self.c = array([[100], [-50]])  # pt c
+        self.pos = array([[self.x[0, 0]], [self.x[1, 0]]])
+        self.objective = array([self.a,self.b,self.c])
+
         self.r = 10  # couloir autour de la ligne à tenir
         self.ksi = pi / 4
         self.delta_r_max = 1
@@ -40,18 +44,19 @@ class sailboat:
         """
         donne la dérivée en fonction du modèle : x' en fonction de u
         """
+        self.pos = array([[self.x[0, 0]], [self.x[1, 0]]])
         self.x, u = self.x.flatten(), u.flatten()
-        θ = self.x[2]
-        v = self.x[3]
-        w = self.x[4]
-        δr = u[0]
-        δsmax = u[1]
+        θ = self.x[2] # angle du voilier
+        v = self.x[3] # vitesse du voilier
+        w = self.x[4] # vitesse de rotation instantannée
+        δr = u[0] # angle du gouvernail
+        δsmax = u[1] # angle de la voile
         w_ap = array([[self.awind * cos(self.phi - θ) - v], [self.awind * sin(self.phi - θ)]])  # vent apparent, cf formule du poly
-        phi_ap = angle(w_ap)  # idem
+        phi_ap = angle(w_ap)   # direction du vent apparent
         a_ap = norm(w_ap)
-        sigma = cos(phi_ap) + cos(δsmax)  # indicateur de la tension
+        sigma = cos(phi_ap) + cos(δsmax)  # indicateur de la tension --> donne le comportement de la voile (tendue ou non)
         if sigma < 0:
-            δs = pi + phi_ap
+            δs = pi + phi_ap # la voile n'est pas tendue donc se comporte comme un drapeau et va dans le sens du vent
         else:
             δs = -sign(sin(phi_ap)) * δsmax
         fr = self.p4 * v * sin(δr)
@@ -63,6 +68,14 @@ class sailboat:
         xdot = array([[dx], [dy], [w], [dv], [dw]])
         return xdot, δs  # δs angle de la voile
 
+    def rotationObjectif(self):
+        self.objective = [self.objective[2], self.objective[0], self.objective[1]]
+
+
+    #fonction qui calcule une distance entre deux points
+    def distance(self, point):
+        return sqrt((self.x[0, 0] - point[0,0]) ** 2 + (self.x[1, 0] - point[1,0]) ** 2)
+
     def my_det(self,v_x, v_y):
         """
 
@@ -72,14 +85,22 @@ class sailboat:
         return vx1 * vy2 - vy1 * vx2
 
     def controleur(self):
+
+        #le cap à suivre le cap par défaut est [ac]
+        if self.distance(self.objective[2]) <= 5:
+            self.rotationObjectif()
+            print('objectif changé', self.objective)
+            print('nouvelle distance = ', self.distance(self.objective[2]))
+
         m = array([[self.x[0, 0]], [self.x[1, 0]]])
-        e = sailboat.my_det(self,(self.b - self.a) / np.linalg.norm(self.b - self.a), m - self.a)
+        e = sailboat.my_det(self,(self.objective[2] - self.objective[0]) / np.linalg.norm(self.objective[2] - self.objective[0]), m - self.objective[0])
         if abs(e) > self.r:
             self.q = np.sign(e)
-        phi = np.arctan2((self.b - self.a)[1, 0], (self.b - self.a)[0, 0])
+        phi = np.arctan2((self.objective[2] - self.objective[0])[1, 0], (self.objective[2] - self.objective[0])[0, 0])
         theta_bar = phi - np.arctan2(e, self.r)
         if (np.cos(self.phi - theta_bar) + np.cos(self.ksi) < 0) or ((abs(e) - self.r < 0) and (np.cos(phi - theta_bar) + np.cos(self.ksi) < 0)):
-            theta_bar = pi + self.phi + self.q * self.ksi
+            theta_bar = pi + self.phi - self.q * self.ksi
         delta_r = (self.delta_r_max / pi) * sawtooth(self.x[2, 0] - theta_bar)
         delta_s_max = (pi / 2) * np.power(((cos(self.phi - theta_bar) + 1) / 2), np.log10(pi / (2 * self.beta)) / np.log10(2))
         return array([[delta_r], [delta_s_max]])
+
