@@ -12,9 +12,19 @@ for t in arange(0,1000,0.1):
     cla()
     ax.set_xlim(-200, 200)
     ax.set_ylim(-100, 100)
-    plot([boat.a[0,0],boat.b[0,0]],[boat.a[1,0],boat.b[1,0]],'red')
-    plot([boat.a[0,0],boat.c[0,0]],[boat.a[1,0],boat.c[1,0]],'blue')
-    plot([boat.b[0,0],boat.c[0,0]],[boat.b[1,0],boat.c[1,0]],'green')
+    for index, objectif in enumerate(boat.objective):
+        if index != len(boat.objective)-1:
+            plot([boat.objective[index][0, 0],boat.objective[index+1][0, 0]], [boat.objective[index][1, 0], boat.objective[index+1][1, 0]], 'red')
+            ax.plot(objectif[0], objectif[1], 'ro')
+        else :
+            plot([boat.objective[0][0, 0], boat.objective[index][0, 0]], [boat.objective[0][1, 0], boat.objective[index][1, 0]], 'red')
+            ax.plot(objectif[0], objectif[1], 'ro')
+
+
+    #
+    # plot([boat.objective[0][0,0],boat.objective[1][0,0]],[boat.objective[0][1,0],boat.objective[1][1,0]],'red')
+    # plot([boat.objective[0][0,0],boat.objective[2][0,0]],[boat.objective[0][1,0],boat.objective[2][1,0]],'blue')
+    # plot([boat.objective[1][0,0],boat.objective[2][0,0]],[boat.objective[1][1,0],boat.objective[2][1,0]],'green')
 
     u=boat.controleur()
     xdot,δs=boat.f(u)
