@@ -20,12 +20,6 @@ for t in arange(0,1000,0.1):
             plot([boat.objective[0][0, 0], boat.objective[index][0, 0]], [boat.objective[0][1, 0], boat.objective[index][1, 0]], 'red')
             ax.plot(objectif[0], objectif[1], 'ro')
 
-
-    #
-    # plot([boat.objective[0][0,0],boat.objective[1][0,0]],[boat.objective[0][1,0],boat.objective[1][1,0]],'red')
-    # plot([boat.objective[0][0,0],boat.objective[2][0,0]],[boat.objective[0][1,0],boat.objective[2][1,0]],'blue')
-    # plot([boat.objective[1][0,0],boat.objective[2][0,0]],[boat.objective[1][1,0],boat.objective[2][1,0]],'green')
-
     u=boat.controleur()
     xdot,δs=boat.f(u)
     boat.x = (boat.x + (boat.dt*xdot).T).T
