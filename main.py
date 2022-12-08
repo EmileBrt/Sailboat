@@ -8,7 +8,10 @@ boat = sailboat()
 fig = figure()
 ax = fig.add_subplot(111, aspect='equal')
 
-for t in arange(0,1000,0.1):
+
+t=0
+while boat.finish != len(boat.objective):
+
     cla()
     ax.set_xlim(-200, 200)
     ax.set_ylim(-100, 100)
@@ -50,6 +53,6 @@ for t in arange(0,1000,0.1):
     plot(r_v[0, :], r_v[1, :], color='blue')
 
 
-
+    t+=0.1
     pause(0.01)
 pause(10)

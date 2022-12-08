@@ -34,6 +34,7 @@ class sailboat:
         self.c = array([[100], [-50]])  # pt c
         self.pos = array([[self.x[0, 0]], [self.x[1, 0]]])
         self.objective = array([self.a,self.b,self.c])
+        self.finish = 0
 
         self.r = 10  # couloir autour de la ligne à tenir
         self.ksi = pi / 4
@@ -70,6 +71,7 @@ class sailboat:
 
     def rotationObjectif(self):
         self.objective = [self.objective[2], self.objective[0], self.objective[1]]
+        self.finish = self.finish + 1
 
 
     #fonction qui calcule une distance entre deux points
