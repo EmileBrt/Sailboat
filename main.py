@@ -9,6 +9,18 @@ fig = figure()
 ax = fig.add_subplot(111, aspect='equal')
 
 
+def color(n):
+    r = [0.2627,0.6039,0.5921]
+    g = [0.7960,0.9294,0.8352]
+    c = np.ones((4,n))
+    for i in range(n):
+        for j in range(3):
+            c[j,i] = round( r[j] + (g[j]-r[j])*(i/n),4)
+    return c.T
+
+
+colors = color(len(boat.objective))
+
 t=0
 while boat.finish != len(boat.objective):
 
@@ -17,9 +29,9 @@ while boat.finish != len(boat.objective):
     ax.set_ylim(-100, 100)
     for index, objectif in enumerate(boat.objective):
         if index != len(boat.objective)-1:
-            plot([boat.objective[index][0, 0],boat.objective[index+1][0, 0]], [boat.objective[index][1, 0], boat.objective[index+1][1, 0]], 'red')
+            plot([boat.objective[index][0, 0],boat.objective[index+1][0, 0]], [boat.objective[index][1, 0], boat.objective[index+1][1, 0]], color=colors[index])
         else :
-            plot([boat.objective[0][0, 0], boat.objective[index][0, 0]], [boat.objective[0][1, 0], boat.objective[index][1, 0]], 'red')
+            plot([boat.objective[0][0, 0], boat.objective[index][0, 0]], [boat.objective[0][1, 0], boat.objective[index][1, 0]],color=colors[index])
         ax.plot(objectif[0], objectif[1], 'ro')
 
     u=boat.controleur()
