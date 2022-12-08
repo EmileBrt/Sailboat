@@ -66,7 +66,6 @@ while boat.finish != len(boat.objective):
 
 
     t+=dt #dt
-    dt+=0.1
     pause(0.01)
 
 print('temps de parcours : ', t)
