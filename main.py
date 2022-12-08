@@ -15,10 +15,9 @@ for t in arange(0,1000,0.1):
     for index, objectif in enumerate(boat.objective):
         if index != len(boat.objective)-1:
             plot([boat.objective[index][0, 0],boat.objective[index+1][0, 0]], [boat.objective[index][1, 0], boat.objective[index+1][1, 0]], 'red')
-            ax.plot(objectif[0], objectif[1], 'ro')
         else :
             plot([boat.objective[0][0, 0], boat.objective[index][0, 0]], [boat.objective[0][1, 0], boat.objective[index][1, 0]], 'red')
-            ax.plot(objectif[0], objectif[1], 'ro')
+        ax.plot(objectif[0], objectif[1], 'ro')
 
     u=boat.controleur()
     xdot,δs=boat.f(u)
