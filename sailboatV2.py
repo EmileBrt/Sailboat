@@ -36,7 +36,7 @@ class sailboat:
         self.delta_r_max = 1
         self.beta = pi / 4  # coefficient obtenu avec l'équation résolue
 
-    def f(self, u, dt):
+    def f(self, u):
         """
         donne la dérivée en fonction du modèle : x' en fonction de u
         """
@@ -50,7 +50,6 @@ class sailboat:
         #modification du vent en fonction du temps
 
 
-        self.phi = dt
         w_ap = array([[self.awind * cos(self.phi - θ) - v], [self.awind * sin(self.phi - θ)]])  # vent apparent, cf formule du poly
         phi_ap = angle(w_ap)   # direction du vent apparent
         a_ap = norm(w_ap)

@@ -22,7 +22,7 @@ while boat.finish != len(boat.objective):
         ax.plot(objectif[0], objectif[1], 'ro')
 
     u=boat.controleur()
-    xdot,δs=boat.f(u, dt)
+    xdot,δs=boat.f(u)
     boat.x = (boat.x + (dt*xdot).T).T
 
     #### Tracé du bâteau
@@ -53,6 +53,7 @@ while boat.finish != len(boat.objective):
 
 
     t+=dt
+    dt+=0.1
     pause(0.01)
 
 print('temps de parcours : ', t)
