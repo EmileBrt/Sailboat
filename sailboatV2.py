@@ -48,10 +48,10 @@ class sailboat:
         δsmax = u[1] # angle de la voile
 
         #modification du vent en fonction du temps
-        w_ap = array([[self.awind * cos(self.phi - θ) - v], [self.awind * sin(self.phi - θ)]])  # vent apparent, cf formule du poly
+        w_ap = array([[self.awind * cos(self.phi - θ) - v], [self.awind * sin(self.phi - θ)]]) # vent apparent
         phi_ap = angle(w_ap)   # direction du vent apparent
         a_ap = norm(w_ap)
-        sigma = cos(phi_ap) + cos(δsmax)  # indicateur de la tension --> donne le comportement de la voile (tendue ou non)
+        sigma = cos(phi_ap) + cos(δsmax) # indicateur de la tension (tendue ou non)
         if sigma < 0:
             δs = pi + phi_ap # la voile n'est pas tendue donc se comporte comme un drapeau et va dans le sens du vent
         else:
