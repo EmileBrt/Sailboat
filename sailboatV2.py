@@ -10,7 +10,7 @@ def angle(x):
     return arctan2(x[1],x[0])
 
 class sailboat:
-    def __init__(self,objectif= array([array([[-50], [0]]), array([[50], [50]]), array([[100], [-50]])]), x0=array([[10, -40, -3, 1, 0]]).T):
+    def __init__(self,objectif= array([array([[-50], [0]]), array([[50], [50]]), array([[50], [-50]])]), x0=array([[10, -40, -3, 1, 0]]).T):
         # coefficients
         self.p0 = 0.1  # drift coefficient
         self.p1 = 1  # drag coefficient
@@ -67,7 +67,7 @@ class sailboat:
         return xdot, δs  # δs angle de la voile
 
     def rotationObjectif(self):
-        self.objective = [self.objective[2], self.objective[0], self.objective[1]]
+        self.objective = [self.objective[-1]] + self.objective[:-1]
         self.finish = self.finish + 1
 
 

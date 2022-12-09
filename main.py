@@ -4,9 +4,12 @@ from matplotlib.pyplot import *
 from numpy.linalg import *
 from sailboatV2 import *
 
-boat = sailboat()
+boat = sailboat(objectif=array([array([[-50], [0]]), array([[50], [50]]), array([[50], [-50]]), array([[170], [50]]), array([[120], [-100]]), array([[-10], [10]])]))
 fig = figure()
 ax = fig.add_subplot(111, aspect='equal')
+
+A = [1,2,3,4,5]
+print('A',[A[-1]] + A[:-1])
 
 
 def color(n):
@@ -32,10 +35,8 @@ while boat.finish != len(boat.objective):
     ax.set_xlim(-200, 200)
     ax.set_ylim(-100, 100)
     for index, objectif in enumerate(boat.objective):
-        if index != len(boat.objective)-1:
-            plot([boat.objective[index][0, 0],boat.objective[index+1][0, 0]], [boat.objective[index][1, 0], boat.objective[index+1][1, 0]], color=colors[index])
-        else :
-            plot([boat.objective[0][0, 0], boat.objective[index][0, 0]], [boat.objective[0][1, 0], boat.objective[index][1, 0]],color=colors[index])
+
+        plot([boat.objective[index][0, 0],boat.objective[(index+1)%(len(boat.objective))][0, 0]], [boat.objective[index][1, 0], boat.objective[(index+1)%(len(boat.objective))][1, 0]], color=colors[index])
         ax.plot(objectif[0], objectif[1], 'ro')
 
     u=boat.controleur()
@@ -51,7 +52,7 @@ while boat.finish != len(boat.objective):
     r = np.dot(bp,m)
     r += array([np.ones(6),np.zeros(6)])*boat.x[0]
     r += array([np.zeros(6),np.ones(6)])*boat.x[1]
-    plot(r[0, :], r[1, :], color='red')
+    plot(r[0, :], r[1, :], color='black')
 
     #### Tracé du Vent
     f = array([[-10,10,8],[0,0,2]])
@@ -77,5 +78,5 @@ print('temps de parcours : ', t)
 #plpot de la trajectoire du voilier
 liste_position_voilier_x = [i for i,j in liste_position_voilier]
 liste_position_voilier_y = [j for i,j in liste_position_voilier]
-plot(liste_position_voilier_x, liste_position_voilier_y, color='green')
+plot(liste_position_voilier_x, liste_position_voilier_y, color='blue')
 pause(10)
