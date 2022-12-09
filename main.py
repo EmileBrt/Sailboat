@@ -22,6 +22,10 @@ def color(n):
 colors = color(len(boat.objective))
 
 dt,t=0.1,0
+
+liste_position_voilier = [boat.x[0:2]]
+print('liste_position_voilier', liste_position_voilier)
+
 while boat.finish != len(boat.objective):
 
     cla()
@@ -37,6 +41,7 @@ while boat.finish != len(boat.objective):
     u=boat.controleur()
     xdot,δs=boat.f(u)
     boat.x = (boat.x + (dt*xdot).T).T
+    liste_position_voilier.append(boat.x[0:2])
 
     #### Tracé du bâteau
     a,b,c = 5,7,2
@@ -69,4 +74,8 @@ while boat.finish != len(boat.objective):
     pause(0.01)
 
 print('temps de parcours : ', t)
+#plpot de la trajectoire du voilier
+liste_position_voilier_x = [i for i,j in liste_position_voilier]
+liste_position_voilier_y = [j for i,j in liste_position_voilier]
+plot(liste_position_voilier_x, liste_position_voilier_y, color='green')
 pause(10)

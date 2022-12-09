@@ -48,8 +48,6 @@ class sailboat:
         δsmax = u[1] # angle de la voile
 
         #modification du vent en fonction du temps
-
-
         w_ap = array([[self.awind * cos(self.phi - θ) - v], [self.awind * sin(self.phi - θ)]])  # vent apparent, cf formule du poly
         phi_ap = angle(w_ap)   # direction du vent apparent
         a_ap = norm(w_ap)
@@ -65,6 +63,7 @@ class sailboat:
         dv = (fs * sin(δs) - fr * sin(δr) - self.p1 * v ** 2) / self.p8
         dw = (fs * (self.p5 - self.p6 * cos(δs)) - self.p7 * fr * cos(δr) - self.p2 * w * v) / self.p9
         xdot = array([[dx], [dy], [w], [dv], [dw]])
+
         return xdot, δs  # δs angle de la voile
 
     def rotationObjectif(self):
