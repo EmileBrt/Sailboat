@@ -71,11 +71,6 @@ class sailboat:
         # take the last point of self.objective and put it at the first position
 
         self.objective = roll(self.objective, 1, axis=0)
-        #
-        #
-        # objectif_atteint = [self.objective[-1]]
-        # liste_objectif = objectif_atteint.append(self.objective[:-1])
-        # self.objective = liste_objectif
         self.finish = self.finish + 1
 
 
