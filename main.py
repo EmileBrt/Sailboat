@@ -4,12 +4,9 @@ from matplotlib.pyplot import *
 from numpy.linalg import *
 from sailboatV2 import *
 
-boat = sailboat(objectif=array([array([[-50], [0]]), array([[50], [50]]), array([[50], [-50]]), array([[170], [50]]), array([[120], [-100]]), array([[-10], [10]])]))
+boat = sailboat(objectif=array([array([[-50], [0]]), array([[0], [0]]), array([[0], [50]]), array([[50], [-50]])]))
 fig = figure()
 ax = fig.add_subplot(111, aspect='equal')
-
-A = [1,2,3,4,5]
-print('A',[A[-1]] + A[:-1])
 
 
 def color(n):
@@ -27,7 +24,6 @@ colors = color(len(boat.objective))
 dt,t=0.1,0
 
 liste_position_voilier = [boat.x[0:2]]
-print('liste_position_voilier', liste_position_voilier)
 
 while boat.finish != len(boat.objective):
 

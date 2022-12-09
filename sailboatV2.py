@@ -10,7 +10,7 @@ def angle(x):
     return arctan2(x[1],x[0])
 
 class sailboat:
-    def __init__(self,objectif= array([array([[-50], [0]]), array([[50], [50]]), array([[50], [-50]])]), x0=array([[10, -40, -3, 1, 0]]).T):
+    def __init__(self,objectif= array([array([[-50], [0]]), array([[0], [50]]), array([[50], [-50]])]), x0=array([[10, -40, -3, 1, 0]]).T):
         # coefficients
         self.p0 = 0.1  # drift coefficient
         self.p1 = 1  # drag coefficient
@@ -67,7 +67,15 @@ class sailboat:
         return xdot, δs  # δs angle de la voile
 
     def rotationObjectif(self):
-        self.objective = [self.objective[-1]] + self.objective[:-1]
+
+        # take the last point of self.objective and put it at the first position
+
+        self.objective = roll(self.objective, 1, axis=0)
+        #
+        #
+        # objectif_atteint = [self.objective[-1]]
+        # liste_objectif = objectif_atteint.append(self.objective[:-1])
+        # self.objective = liste_objectif
         self.finish = self.finish + 1
 
 
@@ -86,17 +94,17 @@ class sailboat:
     def controleur(self):
 
         #le cap à suivre le cap par défaut est [ac]
-        if self.distance(self.objective[2]) <= 5:
+        if self.distance(self.objective[-1]) <= 5:
             self.rotationObjectif()
             print('objectif changé', self.objective)
-            print('nouvelle distance = ', self.distance(self.objective[2]))
+            print('nouvelle distance = ', self.distance(self.objective[-1]))
 
         m = array([[self.x[0, 0]], [self.x[1, 0]]])
-        e = sailboat.my_det(self,(self.objective[2] - self.objective[0])
-                            / np.linalg.norm(self.objective[2] - self.objective[0]), m - self.objective[0])
+        e = sailboat.my_det(self,(self.objective[-1] - self.objective[0])
+                            / np.linalg.norm(self.objective[-1] - self.objective[0]), m - self.objective[0])
         if abs(e) > self.r:
             self.q = np.sign(e)
-        phi = np.arctan2((self.objective[2] - self.objective[0])[1, 0], (self.objective[2] - self.objective[0])[0, 0])
+        phi = np.arctan2((self.objective[-1] - self.objective[0])[1, 0], (self.objective[-1] - self.objective[0])[0, 0])
         theta_bar = phi - np.arctan2(e, self.r)
         if (np.cos(self.phi - theta_bar) + np.cos(self.ksi) < 0) \
                 or ((abs(e) - self.r < 0) and (np.cos(phi - theta_bar) + np.cos(self.ksi) < 0)):
