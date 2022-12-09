@@ -92,14 +92,17 @@ class sailboat:
             print('nouvelle distance = ', self.distance(self.objective[2]))
 
         m = array([[self.x[0, 0]], [self.x[1, 0]]])
-        e = sailboat.my_det(self,(self.objective[2] - self.objective[0]) / np.linalg.norm(self.objective[2] - self.objective[0]), m - self.objective[0])
+        e = sailboat.my_det(self,(self.objective[2] - self.objective[0])
+                            / np.linalg.norm(self.objective[2] - self.objective[0]), m - self.objective[0])
         if abs(e) > self.r:
             self.q = np.sign(e)
         phi = np.arctan2((self.objective[2] - self.objective[0])[1, 0], (self.objective[2] - self.objective[0])[0, 0])
         theta_bar = phi - np.arctan2(e, self.r)
-        if (np.cos(self.phi - theta_bar) + np.cos(self.ksi) < 0) or ((abs(e) - self.r < 0) and (np.cos(phi - theta_bar) + np.cos(self.ksi) < 0)):
+        if (np.cos(self.phi - theta_bar) + np.cos(self.ksi) < 0) \
+                or ((abs(e) - self.r < 0) and (np.cos(phi - theta_bar) + np.cos(self.ksi) < 0)):
             theta_bar = pi + self.phi - self.q * self.ksi
         delta_r = (self.delta_r_max / pi) * sawtooth(self.x[2, 0] - theta_bar)
-        delta_s_max = (pi / 2) * np.power(((cos(self.phi - theta_bar) + 1) / 2), np.log10(pi / (2 * self.beta)) / np.log10(2))
+        delta_s_max = (pi / 2) * np.power(((cos(self.phi - theta_bar) + 1) / 2),
+                                          np.log10(pi / (2 * self.beta)) / np.log10(2))
         return array([[delta_r], [delta_s_max]])
 
